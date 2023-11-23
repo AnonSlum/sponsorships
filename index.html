@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Contact Form</h2>
+        <form id="submissionForm" action="https://script.google.com/macros/s/AKfycbxba6oNB5Un0QtcdZK5nqalpJhhDtEhL6Oo3euRKGXgyUhLu0lbOkD-Iyh209qdJSkr5A/exec" method="post">
+            <!-- Name Field -->
+            <div class="mb-3">
+                <label for="name" class="form-label">Sponsor Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name">
+            </div>
+
+            <!-- Email Field -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
+            </div>
+
+            <!-- Phone Number Field -->
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
+            </div>
+
+            <!-- Address Field -->
+            <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" class="form-control" id="address" name="address" name placeholder="Enter your address">
+            </div>
+
+            <!-- DateTime Field -->
+            <input type="hidden" id="currentdate" name="currentdate">
+
+            <!-- Select Field -->
+            <div class="mb-3">
+                <label for="options" class="form-label">Options</label>
+                <select class="form-select" id="sponsorship" name="sponsorship">
+                    <option selected>Choose an option</option>
+                    <option value="Bronze Sponsorship">Bronze Sponsorship</option>
+                    <option value="Silver Sponsorship">Silver Sponsorship</option>
+                    <option value="Gold Sponsorship">Gold Sponsorship</option>
+                    <option value="Platinum Sponsorship">Platinum Sponsorship</option>
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-warning">Submit</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById('submissionForm');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                // Get the current date and time
+                const now = new Date();
+                const formattedDate = now.getFullYear() + "-" 
+                    + String(now.getMonth() + 1).padStart(2, '0') + "-" 
+                    + String(now.getDate()).padStart(2, '0') + " - " 
+                    + String(now.getHours()).padStart(2, '0') + ":" 
+                    + String(now.getMinutes()).padStart(2, '0') + ":" 
+                    + String(now.getSeconds()).padStart(2, '0');
+
+                const currentdateField = document.getElementById('currentdate');
+                currentdateField.value = formattedDate;
+
+                console.log("Current Date:", currentdateField.value); // Log the datetime
+
+                // Fetch API to send form data to Google Sheets
+                fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form)
+                })
+                .then(response => {
+                    console.log("Response:", response); // Log the response
+                    if (response.ok) {
+                        window.location.href = 'thank-you.html';
+                    } else {
+                        alert("There was an error submitting the form.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error); // Log any errors
+                });
+            });
+        });
+
+        </script>
+        
+</body>
+</html>
